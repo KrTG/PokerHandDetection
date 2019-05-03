@@ -1,0 +1,90 @@
+<Screen>:    
+    image: image
+    text_output: text_output
+    corner_images: corner_images
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout
+            size_hint_y: 8
+            orientation: 'horizontal'
+            Image:
+                id: image
+                size_hint_x: 1   
+            PredictionList:
+                id : corner_images
+                orientation: 'vertical'
+                size_hint_x: 1
+        Label:
+            id: text_output
+            halign: 'left'
+            valign: 'center'
+            text_size: self.size
+            padding: (10, 10)
+            canvas.before:
+                Color:
+                    rgba: (0.4, 0.4, 0.4, 1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        Button:
+            text: 'Load'
+            on_release: root.show_load()
+        Button:
+            text: 'Detect'
+            on_release: root.detect_hand()
+
+<CornerPredictions>:
+    image: image
+    prediction_labels: prediction_labels
+
+    padding: [1, 1, 1, 1]
+    BoxLayout:
+        orientation: "horizontal"
+        Image:
+            id: image
+        BoxLayout:
+            id: prediction_labels
+            orientation: "vertical"
+
+<CardPredictions>:    
+    voting_labels: voting_labels
+    corner_predictions: corner_predictions
+    orientation: 'horizontal'
+
+    canvas:
+        Color:
+            rgba: self.bgcolor, self.bgcolor, self.bgcolor, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    GridLayout:
+        id: corner_predictions
+        size_hint_x: 3
+        cols: 2
+        orientation: 'horizontal'
+    BoxLayout:
+        size_hint_x: 1
+        id: voting_labels
+        orientation: "vertical"
+
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+            path: "."
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Load"
+                on_release: root.load(filechooser.path, filechooser.selection)
+
